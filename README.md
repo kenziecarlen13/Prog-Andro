@@ -1,3 +1,3 @@
 ## PEMROGRAMAN PERANGKAT BERGERAK BERBASIS ANDROID
-Nama  : Putu Gde Kenzie Carlen Mataram
+Nama  : Putu Gde Kenzie Carlen Mataram <br>
 NIM   : 71230994
