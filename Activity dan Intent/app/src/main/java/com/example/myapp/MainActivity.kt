@@ -22,7 +22,8 @@ class MainActivity : AppCompatActivity() {
 
         // Profil LinkedIn (Implicit Intent)
         btnLinkedIn.setOnClickListener {
-            val linkedInUrl = "https://www.linkedin.com/in/kenzie-carlen-b841a4253/"
+            val linkedInUrl = "https://www.linkedin.com/"
+//            val linkedInUrl = "https://www.linkedin.com/in/kenzie-carlen-b841a4253/"
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(linkedInUrl))
             startActivity(intent)
         }
