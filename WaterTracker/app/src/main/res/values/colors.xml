@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="water_blue_primary">#2196F3</color>
+    <color name="water_blue_dark">#1976D2</color>
+    <color name="water_blue_accent">#00BCD4</color>
+    <color name="water_blue_accent_light">#81D4FA</color>
+    
+    <color name="water_bg_light">#F5F9FC</color>
+    <color name="water_bg_dark">#121212</color>
+    
+    <color name="water_white">#FFFFFF</color>
+    <color name="water_gray_50">#FAFAFA</color>
+    
+    <color name="water_text_main">#212121</color>
+    <color name="water_text_secondary">#757575</color>
+    <color name="water_divider">#BDBDBD</color>
+
+    <color name="water_placeholder_light">#E0E0E0</color>
+    <color name="water_placeholder_dark">#424242</color>
+</resources>

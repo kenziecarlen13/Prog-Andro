@@ -1,0 +1,17 @@
+<resources>
+    <style name="Theme.WaterTracker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/water_blue_primary</item>
+        <item name="colorPrimaryVariant">#000000</item>
+        <item name="colorOnPrimary">@color/water_white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/water_blue_accent_light</item>
+        <item name="colorSecondaryVariant">@color/water_blue_accent</item>
+        <item name="colorOnSecondary">@color/water_white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">#000000</item>
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/water_bg_dark</item>
+        <item name="colorSurface">#1E1E1E</item>
+    </style>
+</resources>
