@@ -1,16 +1,38 @@
 package com.example.watertracker
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.watertracker.data.ApiService
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Using NoActionBar theme, so we rely on layouts for UI rather than default action bar.
         setContentView(R.layout.activity_main)
+        
+        lifecycleScope.launch {
+            try {
+                val response = apiService.getPlaceholderData()
+                if (response.isSuccessful) {
+                    Log.d("MainActivity", "API Call Successful: ${response.body()}")
+                } else {
+                    Log.e("MainActivity", "API Call Failed: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("MainActivity", "API Call Exception: ${e.message}")
+            }
+        }
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
@@ -36,7 +58,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Set default fragment only on first launch, prevent duplication on rotation.
         if (savedInstanceState == null) {
             bottomNavigationView.selectedItemId = R.id.nav_home
             replaceFragment(HomeFragment())
@@ -44,7 +65,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun replaceFragment(fragment: Fragment) {
-        // Correctly replace fragments in the FrameLayout container.
         supportFragmentManager.beginTransaction()
             .replace(R.id.frameLayout, fragment)
             .commit()
