@@ -9,13 +9,17 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
+
+    @Inject
+    lateinit var apiService: ApiService
 
     private lateinit var progressBar: ProgressBar
     private lateinit var tvQuote: TextView
@@ -35,13 +39,6 @@ class HomeFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar)
         tvQuote     = view.findViewById(R.id.tvQuote)
         tvAuthor    = view.findViewById(R.id.tvAuthor)
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://zenquotes.io/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val apiService = retrofit.create(ApiService::class.java)
 
         progressBar.visibility = View.VISIBLE
 

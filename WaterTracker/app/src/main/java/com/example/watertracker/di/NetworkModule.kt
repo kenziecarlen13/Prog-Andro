@@ -1,6 +1,6 @@
 package com.example.watertracker.di
 
-import com.example.watertracker.data.ApiService
+import com.example.watertracker.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,9 +16,8 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideRetrofit(): Retrofit {
-        // Ganti "https://your.base.url/" dengan base URL API Anda yang sebenarnya
         return Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com/")
+            .baseUrl("https://zenquotes.io/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
