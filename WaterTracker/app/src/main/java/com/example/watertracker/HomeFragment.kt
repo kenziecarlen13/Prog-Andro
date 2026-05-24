@@ -48,20 +48,25 @@ class HomeFragment : Fragment() {
                 progressBar.visibility = View.GONE
 
                 if (response.isSuccessful && !response.body().isNullOrEmpty()) {
+                    // Task 8 (Modul 12): Log successful API response
+                    Log.d("DEBUG_API", "Response Berhasil, jumlah data API: ${response.body()?.size ?: 0}")
+
                     val quote = response.body()!![0]
                     tvQuote.text    = "\"${quote.text}\""
                     tvAuthor.text   = "- ${quote.author}"
                     tvQuote.visibility  = View.VISIBLE
                     tvAuthor.visibility = View.VISIBLE
                 } else {
-                    Log.e("HomeFragment", "Response error: ${response.code()}")
+                    // Task 8 (Modul 12): Log failed response with status code
+                    Log.e("DEBUG_API", "Response gagal: ${response.code()}")
                     Toast.makeText(context, "Failed to load quote.", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<Quote>>, t: Throwable) {
                 progressBar.visibility = View.GONE
-                Log.e("HomeFragment", "Network error: ${t.message}")
+                // Task 8 (Modul 12): Log network/connection failure
+                Log.e("DEBUG_API", "Network error/Gagal: ${t.message}")
                 Toast.makeText(context, "Check your internet connection.", Toast.LENGTH_SHORT).show()
             }
         })

@@ -1,5 +1,6 @@
 package com.example.watertracker
 
+import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.view.LayoutInflater
@@ -33,24 +34,25 @@ class HydrationTierAdapter(
         holder.tvScore.text = "${user.daysCompliant}/7 Hari"
 
         // PENTING (Logika Pengelompokan)
-        when (user.daysCompliant) {
+        val badgeText = when (user.daysCompliant) {
             7 -> {
-                holder.tvBadge.text = "Hydro Archon"
                 holder.tvBadge.setTextColor(Color.parseColor("#FFD700")) // Gold
+                "Hydro Archon"
             }
             in 4..6 -> {
-                holder.tvBadge.text = "Aqua Ascendant"
                 holder.tvBadge.setTextColor(Color.parseColor("#42A5F5")) // Blue
+                "Aqua Ascendant"
             }
             in 1..3 -> {
-                holder.tvBadge.text = "Oasis Seeker"
                 holder.tvBadge.setTextColor(Color.parseColor("#66BB6A")) // Green
+                "Oasis Seeker"
             }
             else -> {
-                holder.tvBadge.text = "Thirsty Iron"
                 holder.tvBadge.setTextColor(Color.parseColor("#B0BEC5")) // Grey
+                "Thirsty Iron"
             }
         }
+        holder.tvBadge.text = badgeText
 
         // PENTING (Syarat URI Modul 8): Try-Catch loading URI dengan Fallback
         try {
@@ -59,17 +61,28 @@ class HydrationTierAdapter(
             }
             val uri = Uri.parse(user.profileImageUri)
             holder.ivAvatar.setImageURI(uri)
-            
+
             // Check if setImageURI actually worked, if the drawable is null it means invalid uri
             if (holder.ivAvatar.drawable == null) {
                 throw Exception("Invalid URI or failed to load")
             }
         } catch (e: SecurityException) {
-             // Sesuai tuntutan modul
-             holder.ivAvatar.setImageResource(R.drawable.ic_profile)
+            // Sesuai tuntutan modul
+            holder.ivAvatar.setImageResource(R.drawable.ic_profile)
         } catch (e: Exception) {
-             // Fallback apabila uri invalid, kosong, dll
-             holder.ivAvatar.setImageResource(R.drawable.ic_profile)
+            // Fallback apabila uri invalid, kosong, dll
+            holder.ivAvatar.setImageResource(R.drawable.ic_profile)
+        }
+
+        // Task 2 (Modul 5): Explicit Intent to open DetailActivity on item click
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, DetailActivity::class.java).apply {
+                putExtra("name", user.name)
+                putExtra("daysCompliant", user.daysCompliant)
+                putExtra("badge", badgeText)
+            }
+            context.startActivity(intent)
         }
     }
 

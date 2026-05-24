@@ -92,4 +92,25 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
         return tierList
     }
+
+    // Task 4 (Modul 7): Dynamic INSERT operation
+    fun insertTierUser(name: String, days: Int, uri: String?, isMe: Boolean) {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put(COLUMN_NAME, name)
+            put(COLUMN_DAYS, days)
+            put(COLUMN_URI, uri)
+            put(COLUMN_IS_ME, if (isMe) 1 else 0)
+        }
+        db.insert(TABLE_COMPLIANCE, null, values)
+        db.close()
+    }
+
+    // Task 4 (Modul 7): Dynamic DELETE operation
+    fun deleteTierUser(id: Int) {
+        val db = this.writableDatabase
+        db.delete(TABLE_COMPLIANCE, "$COLUMN_ID = ?", arrayOf(id.toString()))
+        db.close()
+    }
 }
+

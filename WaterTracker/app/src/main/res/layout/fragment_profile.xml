@@ -209,6 +209,15 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Task 3 (Modul 5): Open Web Button - Implicit Intent -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnOpenWeb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Open Web"
+                android:textSize="16sp" />
+
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
