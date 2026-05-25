@@ -10,11 +10,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/**
- * Task 7 (Modul 12): Espresso UI Tests for MainActivity.
- *
- * Run with: ./gradlew connectedAndroidTest
- */
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
 
