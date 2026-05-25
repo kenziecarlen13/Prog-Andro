@@ -10,7 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    companion object {
+    companion object {\
         private const val TAG = "LifecycleCheck"
     }
 
