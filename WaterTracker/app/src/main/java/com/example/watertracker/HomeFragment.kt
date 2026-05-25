@@ -1,5 +1,6 @@
 package com.example.watertracker
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,6 +27,13 @@ class HomeFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var tvQuote: TextView
     private lateinit var tvAuthor: TextView
+    
+    private lateinit var progressCircleIndicator: CircularProgressIndicator
+    private lateinit var textProgress: TextView
+    private lateinit var fabAddWater: ExtendedFloatingActionButton
+
+    private var currentIntake = 0
+    private var dailyGoal = 2000 
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,35 +49,57 @@ class HomeFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar)
         tvQuote     = view.findViewById(R.id.tvQuote)
         tvAuthor    = view.findViewById(R.id.tvAuthor)
+        
+        progressCircleIndicator = view.findViewById(R.id.progressCircleIndicator)
+        textProgress = view.findViewById(R.id.textProgress)
+        fabAddWater = view.findViewById(R.id.fabAddWater)
 
+        // Load persisted data
+        val sharedPref = requireActivity().getSharedPreferences("water_prefs", Context.MODE_PRIVATE)
+        currentIntake = sharedPref.getInt("current_intake", 0)
+        dailyGoal = sharedPref.getInt("daily_target", 2000) 
+        
+        updateUI()
+
+        fabAddWater.setOnClickListener {
+            // Ambil cup_size terbaru dari SharedPreferences
+            val cupSize = sharedPref.getInt("cup_size", 250)
+            currentIntake += cupSize
+            
+            with(sharedPref.edit()) {
+                putInt("current_intake", currentIntake)
+                apply()
+            }
+            updateUI()
+            Toast.makeText(context, "Added $cupSize ml of water!", Toast.LENGTH_SHORT).show()
+        }
+
+        fetchQuote()
+    }
+
+    private fun updateUI() {
+        progressCircleIndicator.max = dailyGoal
+        progressCircleIndicator.setProgress(currentIntake, true)
+        textProgress.text = "${currentIntake}ml\n/ ${dailyGoal}ml"
+    }
+
+    private fun fetchQuote() {
         progressBar.visibility = View.VISIBLE
-
         apiService.getRandomQuotes().enqueue(object : Callback<List<Quote>> {
-
             override fun onResponse(call: Call<List<Quote>>, response: Response<List<Quote>>) {
                 progressBar.visibility = View.GONE
-
                 if (response.isSuccessful && !response.body().isNullOrEmpty()) {
-                    // Task 8 (Modul 12): Log successful API response
-                    Log.d("DEBUG_API", "Response Berhasil, jumlah data API: ${response.body()?.size ?: 0}")
-
                     val quote = response.body()!![0]
                     tvQuote.text    = "\"${quote.text}\""
                     tvAuthor.text   = "- ${quote.author}"
                     tvQuote.visibility  = View.VISIBLE
                     tvAuthor.visibility = View.VISIBLE
-                } else {
-                    // Task 8 (Modul 12): Log failed response with status code
-                    Log.e("DEBUG_API", "Response gagal: ${response.code()}")
-                    Toast.makeText(context, "Failed to load quote.", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<Quote>>, t: Throwable) {
                 progressBar.visibility = View.GONE
-                // Task 8 (Modul 12): Log network/connection failure
-                Log.e("DEBUG_API", "Network error/Gagal: ${t.message}")
-                Toast.makeText(context, "Check your internet connection.", Toast.LENGTH_SHORT).show()
+                Log.e("DEBUG_API", "Network error: ${t.message}")
             }
         })
     }

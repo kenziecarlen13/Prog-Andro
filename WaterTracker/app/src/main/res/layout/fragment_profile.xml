@@ -26,14 +26,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <!-- Removed redundant backgroundTint which can cause inflation issues on some View implementations -->
             <View
                 android:id="@+id/avatarCircle"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:background="@drawable/avatar_placeholder_circle" />
 
-            <!-- Changed width to 0dp and used weight for better layout stability inside horizontal LinearLayout -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -58,8 +56,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Settings List Style -->
-        <!-- Fixed ConstraintLayout child usage: changed match_parent to 0dp and added horizontal constraints -->
         <LinearLayout
             android:id="@+id/settingsList"
             android:layout_width="0dp"
@@ -85,6 +81,7 @@
 
             <!-- Daily Target Setting -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDailyTarget"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -117,6 +114,7 @@
                         android:textColor="?android:attr/textColorPrimary"/>
 
                     <TextView
+                        android:id="@+id/tvDailyTargetValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2000 ml"
@@ -125,8 +123,53 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Cup Size Setting -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardCupSize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/water_divider"
+                app:cardBackgroundColor="@android:color/transparent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@android:drawable/ic_menu_view"
+                        app:tint="@color/water_blue_primary" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Cup Size"
+                        android:textSize="16sp"
+                        android:textColor="?android:attr/textColorPrimary"/>
+
+                    <TextView
+                        android:id="@+id/tvCupSizeValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="250 ml"
+                        android:textStyle="bold"
+                        android:textColor="@color/water_text_secondary"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Weight Setting -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardWeight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -159,6 +202,7 @@
                         android:textColor="?android:attr/textColorPrimary"/>
 
                     <TextView
+                        android:id="@+id/tvWeightValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="-- kg"
@@ -169,6 +213,7 @@
 
             <!-- Reminder Frequency Setting -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardReminderFrequency"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -196,14 +241,15 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:text="Reminder Frequency"
+                        android:text="Reminder Count"
                         android:textSize="16sp"
                         android:textColor="?android:attr/textColorPrimary"/>
 
                     <TextView
+                        android:id="@+id/tvReminderFrequencyValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Every 2 hrs"
+                        android:text="0 times"
                         android:textStyle="bold"
                         android:textColor="@color/water_text_secondary"/>
                 </LinearLayout>
@@ -217,6 +263,16 @@
                 android:layout_marginTop="8dp"
                 android:text="Open Web"
                 android:textSize="16sp" />
+
+            <!-- Exit Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnExit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Exit Application"
+                android:textSize="16sp"
+                app:backgroundTint="#F44336" />
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

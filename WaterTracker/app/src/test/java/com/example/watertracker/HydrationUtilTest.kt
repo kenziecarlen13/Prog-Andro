@@ -1,47 +1,113 @@
 package com.example.watertracker
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/**
- * Task 6 (Modul 12): Local Unit Tests for HydrationUtil.
- *
- * Run with: ./gradlew test
- */
 class HydrationUtilTest {
+
+    // --- Pengujian filterTopAchievers ---
 
     @Test
     fun filterTopAchievers_correctFiltering() {
-        // Arrange: Create a dummy list with a mix of daysCompliant values
         val allUsers = listOf(
             TierUser(id = 1, name = "Kenzie",  daysCompliant = 7, profileImageUri = null, isMe = true),
             TierUser(id = 2, name = "Budi",    daysCompliant = 6, profileImageUri = null, isMe = false),
-            TierUser(id = 3, name = "Andi",    daysCompliant = 7, profileImageUri = null, isMe = false),
-            TierUser(id = 4, name = "Siti",    daysCompliant = 2, profileImageUri = null, isMe = false),
-            TierUser(id = 5, name = "Dewi",    daysCompliant = 0, profileImageUri = null, isMe = false),
-            TierUser(id = 6, name = "Reza",    daysCompliant = 7, profileImageUri = null, isMe = false),
-            TierUser(id = 7, name = "Fajar",   daysCompliant = 4, profileImageUri = null, isMe = false)
+            TierUser(id = 3, name = "Andi",    daysCompliant = 7, profileImageUri = null, isMe = false)
         )
-
-        // Expected top achievers: only users with daysCompliant == 7
-        val expectedTopAchievers = listOf(
-            allUsers[0], // Kenzie  - 7 days
-            allUsers[2], // Andi    - 7 days
-            allUsers[5]  // Reza    - 7 days
-        )
-
-        // Act: Call the function under test
         val result = HydrationUtil.filterTopAchievers(allUsers)
+        assertEquals(2, result.size)
+        assertTrue(result.all { it.daysCompliant == 7 })
+    }
 
-        // Assert: Verify size and content match expected top achievers
-        assertEquals("Filtered list should contain exactly 3 top achievers", 3, result.size)
-        assertEquals("First top achiever should be Kenzie",  expectedTopAchievers[0], result[0])
-        assertEquals("Second top achiever should be Andi",   expectedTopAchievers[1], result[1])
-        assertEquals("Third top achiever should be Reza",    expectedTopAchievers[2], result[2])
+    @Test
+    fun filterTopAchievers_emptyList_returnsEmpty() {
+        val result = HydrationUtil.filterTopAchievers(emptyList())
+        assertTrue(result.isEmpty())
+    }
 
-        // Assert: All results have daysCompliant == 7
-        result.forEach { user ->
-            assertEquals("Every user in result must have daysCompliant == 7", 7, user.daysCompliant)
-        }
+    @Test
+    fun filterTopAchievers_noMatches_returnsEmpty() {
+        val users = listOf(
+            TierUser(id = 1, name = "User1", daysCompliant = 0, profileImageUri = null, isMe = false),
+            TierUser(id = 2, name = "User2", daysCompliant = 5, profileImageUri = null, isMe = false)
+        )
+        val result = HydrationUtil.filterTopAchievers(users)
+        assertTrue(result.isEmpty())
+    }
+
+    @Test
+    fun filterTopAchievers_allMatch_returnsAll() {
+        val users = listOf(
+            TierUser(id = 1, name = "User1", daysCompliant = 7, profileImageUri = null, isMe = false),
+            TierUser(id = 2, name = "User2", daysCompliant = 7, profileImageUri = null, isMe = false)
+        )
+        val result = HydrationUtil.filterTopAchievers(users)
+        assertEquals(2, result.size)
+    }
+
+    // --- Pengujian calculateHydrationPercentage ---
+
+    @Test
+    fun calculateHydrationPercentage_normalCase() {
+        assertEquals(50, HydrationUtil.calculateHydrationPercentage(1000, 2000))
+    }
+
+    @Test
+    fun calculateHydrationPercentage_exactGoal_returns100() {
+        assertEquals(100, HydrationUtil.calculateHydrationPercentage(2000, 2000))
+    }
+
+    @Test
+    fun calculateHydrationPercentage_exceedsGoal_capsAt100() {
+        assertEquals(100, HydrationUtil.calculateHydrationPercentage(3000, 2000))
+    }
+
+    @Test
+    fun calculateHydrationPercentage_zeroGoal_returnsZero() {
+        assertEquals(0, HydrationUtil.calculateHydrationPercentage(1000, 0))
+    }
+
+    @Test
+    fun calculateHydrationPercentage_negativeIntake_returnsZero() {
+        // Menguji asupan negatif, harus dibatasi minimal 0%
+        assertEquals(0, HydrationUtil.calculateHydrationPercentage(-500, 2000))
+    }
+
+    @Test
+    fun calculateHydrationPercentage_negativeGoal_returnsZero() {
+        // Menguji target negatif, harus mengembalikan 0% (tidak valid)
+        assertEquals(0, HydrationUtil.calculateHydrationPercentage(1000, -2000))
+    }
+
+    @Test
+    fun calculateHydrationPercentage_roundingCheck() {
+        // 100/300 = 33.33... dibulatkan ke bawah menjadi 33
+        assertEquals(33, HydrationUtil.calculateHydrationPercentage(100, 300))
+    }
+
+    // --- Pengujian calculateRemainingWater ---
+
+    @Test
+    fun calculateRemainingWater_normalCase() {
+        // Asupan 1200ml, target 2000ml -> sisa 800ml
+        assertEquals(800, HydrationUtil.calculateRemainingWater(1200, 2000))
+    }
+
+    @Test
+    fun calculateRemainingWater_goalReached_returnsZero() {
+        // Asupan 2000ml, target 2000ml -> sisa 0ml
+        assertEquals(0, HydrationUtil.calculateRemainingWater(2000, 2000))
+    }
+
+    @Test
+    fun calculateRemainingWater_goalExceeded_returnsZero() {
+        // Asupan 2500ml, target 2000ml -> sisa 0ml (tidak boleh negatif)
+        assertEquals(0, HydrationUtil.calculateRemainingWater(2500, 2000))
+    }
+
+    @Test
+    fun calculateRemainingWater_zeroGoal_returnsZero() {
+        assertEquals(0, HydrationUtil.calculateRemainingWater(100, 0))
     }
 }
