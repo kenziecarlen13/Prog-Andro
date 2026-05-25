@@ -88,8 +88,9 @@ class HomeFragment : Fragment() {
         apiService.getRandomQuotes().enqueue(object : Callback<List<Quote>> {
             override fun onResponse(call: Call<List<Quote>>, response: Response<List<Quote>>) {
                 progressBar.visibility = View.GONE
-                if (response.isSuccessful && !response.body().isNullOrEmpty()) {
-                    val quote = response.body()!![0]
+                val quotes = response.body()
+                if (response.isSuccessful && !quotes.isNullOrEmpty()) {
+                    val quote = quotes.random()
                     tvQuote.text    = "\"${quote.text}\""
                     tvAuthor.text   = "- ${quote.author}"
                     tvQuote.visibility  = View.VISIBLE

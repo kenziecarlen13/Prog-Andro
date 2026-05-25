@@ -6,8 +6,6 @@ import org.junit.Test
 
 class HydrationUtilTest {
 
-    // --- Pengujian filterTopAchievers ---
-
     @Test
     fun filterTopAchievers_correctFiltering() {
         val allUsers = listOf(
@@ -46,7 +44,6 @@ class HydrationUtilTest {
         assertEquals(2, result.size)
     }
 
-    // --- Pengujian calculateHydrationPercentage ---
 
     @Test
     fun calculateHydrationPercentage_normalCase() {
@@ -70,13 +67,11 @@ class HydrationUtilTest {
 
     @Test
     fun calculateHydrationPercentage_negativeIntake_returnsZero() {
-        // Menguji asupan negatif, harus dibatasi minimal 0%
         assertEquals(0, HydrationUtil.calculateHydrationPercentage(-500, 2000))
     }
 
     @Test
     fun calculateHydrationPercentage_negativeGoal_returnsZero() {
-        // Menguji target negatif, harus mengembalikan 0% (tidak valid)
         assertEquals(0, HydrationUtil.calculateHydrationPercentage(1000, -2000))
     }
 
@@ -90,19 +85,16 @@ class HydrationUtilTest {
 
     @Test
     fun calculateRemainingWater_normalCase() {
-        // Asupan 1200ml, target 2000ml -> sisa 800ml
         assertEquals(800, HydrationUtil.calculateRemainingWater(1200, 2000))
     }
 
     @Test
     fun calculateRemainingWater_goalReached_returnsZero() {
-        // Asupan 2000ml, target 2000ml -> sisa 0ml
         assertEquals(0, HydrationUtil.calculateRemainingWater(2000, 2000))
     }
 
     @Test
     fun calculateRemainingWater_goalExceeded_returnsZero() {
-        // Asupan 2500ml, target 2000ml -> sisa 0ml (tidak boleh negatif)
         assertEquals(0, HydrationUtil.calculateRemainingWater(2500, 2000))
     }
 
